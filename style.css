@@ -46,6 +46,7 @@ img {
     outline: none;
     width: 100%;
     height: 100%;
+    transition: all 0.1s ease;
 }
 
 #calculator > button:hover {
@@ -54,6 +55,7 @@ img {
 
 #calculator > button:active {
     background-color: #777777;
+    transform: scale(0.9);
 }
 
 #display {
@@ -85,15 +87,34 @@ img {
     border: none;
     height: 50px;
     width: 50px;
+    transition: all 0.1s ease;
     /* https://codepen.io/sosuke/pen/Pjoqqp for changing svg colors */
-    filter: invert(80%) sepia(52%) saturate(5073%) hue-rotate(186deg) brightness(100%) contrast(103%);
+    filter: invert(75%) sepia(51%) saturate(4959%) hue-rotate(311deg) brightness(94%) contrast(124%);
 }
 
 #display button:hover {
-    filter: invert(68%) sepia(19%) saturate(1175%) hue-rotate(180deg) brightness(103%) contrast(101%);
+    filter: invert(70%) sepia(91%) saturate(1867%) hue-rotate(305deg) brightness(104%) contrast(101%);
+}
+
+#display button:active {
+    transform: scale(0.9);
+    filter: invert(80%) sepia(18%) saturate(402%) hue-rotate(306deg) brightness(102%) contrast(101%);
 }
 
 button > img {
     height: 40px;
     width: 40px;
+}
+
+.operations {
+    color: #FF6675;
+}
+
+#equals {
+    color: #444444;
+    background-color: #FF6675 !important;
+}
+
+#clear {
+    color: #FF1C1C;
 }
