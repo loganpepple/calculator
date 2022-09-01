@@ -24,7 +24,29 @@ class Calculator {
         // if ending in decimal point then remove it first
         if (this.input.slice(-1) == '.') { this.input = this.input.slice(0, -1) }
         if (/[0-9.\)]/.test(this.input.slice(-1))) {
-            this.append(operator)
+            if (operator == '+/-') {
+                this.invertCurrentNumber();
+            } else {
+                this.append(operator)
+            }
+        }
+    }
+
+    invertCurrentNumber() {
+        // find start of current number, check symbol before it, add or switch symbol as needed
+        let match = this.input.match(/[^0-9.]/gi) || -1;
+        let lastSymbolIndex = this.input.lastIndexOf(match[match.length-1]);
+
+        if (lastSymbolIndex == -1) {
+            this.input = '-' + this.input;
+        } else if (lastSymbolIndex == 0 && this.input[lastSymbolIndex] == '-') {
+            this.input = this.input.slice(1);
+        } else if (this.input[lastSymbolIndex] == '-') {
+            this.input = this.input.slice(0, lastSymbolIndex) + '+' + this.input.slice(lastSymbolIndex + 1);
+        } else if (this.input[lastSymbolIndex] == '+') {
+            this.input = this.input.slice(0, lastSymbolIndex) + '-' + this.input.slice(lastSymbolIndex + 1);
+        } else {
+            this.input = this.input.slice(0, lastSymbolIndex) + '-' + this.input.slice(lastSymbolIndex);
         }
     }
 
@@ -89,7 +111,7 @@ class Calculator {
         // only evaluate if input ends in a number
         this.input = this.input.toString();
         if (/[0-9.\)]/.test(this.input.slice(-1)) && this.input.length > 0) {
-            // replace unicode symbols with compatible operators, then eval() input
+            // sanitize: replace unicode symbols with compatible operators, close parentheses, then eval() input
             let calc = this.input.split('').map((e) => {
                 if (e == '÷') { return '\/' }
                 if (e == '×') { return '\*' }
@@ -102,6 +124,7 @@ class Calculator {
 
             if (calc || calc == 0) {
                 this.preview = eval(calc);
+                this.fixColors();
             } else {
                 this.preview = '';
             }
@@ -126,6 +149,13 @@ class Calculator {
     fixColors() {
         // change colors of operations to mach color scheme, find with regex
         this.inputTextElement.innerHTML = this.inputTextElement.innerText.split('').map((e) => {
+            if (/[()%÷×+\-]/.test(e)) {
+                return '<span class="operations">'+e+'</span>';
+            } else {
+                return e;
+            }
+        }).join('');
+        this.previewTextElement.innerHTML = this.previewTextElement.innerText.split('').map((e) => {
             if (/[()%÷×+\-]/.test(e)) {
                 return '<span class="operations">'+e+'</span>';
             } else {
