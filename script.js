@@ -50,63 +50,43 @@ class Calculator {
         }
     }
 
+    isBalanced (input) {
+        let brackets = "()"
+        let stack = []
+    
+        for(let bracket of input) {
+        let bracketsIndex = brackets.indexOf(bracket)
+    
+        if (bracketsIndex === -1){
+            continue
+        }
+    
+        if(bracketsIndex % 2 === 0) {
+            stack.push(bracketsIndex + 1)
+        } else {
+            if(stack.pop() !== bracketsIndex) {
+            return false;
+            }
+        }
+        }
+        return stack.length === 0
+    }
+
+
     appendParentheses() {
         // if ending with a number and unbalanced then close
         // if balanced or ends with operator then open
         
         if (this.input.slice(-1) == '.') { this.input = this.input.slice(0, -1) }
 
-        let isBalanced = (input) => {
-            let brackets = "()"
-            let stack = []
-        
-            for(let bracket of input) {
-            let bracketsIndex = brackets.indexOf(bracket)
-        
-            if (bracketsIndex === -1){
-                continue
-            }
-        
-            if(bracketsIndex % 2 === 0) {
-                stack.push(bracketsIndex + 1)
-            } else {
-                if(stack.pop() !== bracketsIndex) {
-                return false;
-                }
-            }
-            }
-            return stack.length === 0
-        }
-
-        if (/[0-9.]/.test(this.input.slice(-1)) && !isBalanced(this.input)) {
+        if (/[0-9.]/.test(this.input.slice(-1)) && !this.isBalanced(this.input)) {
             this.append(')');
-        } else if (isBalanced(this.input) || !(/[0-9.]/.test(this.input.slice(-1)))) {
+        } else if (this.isBalanced(this.input) || !(/[0-9.]/.test(this.input.slice(-1)))) {
             this.append('(');
         }
     }
 
     calculatePreview() {
-        let isBalanced = (input) => {
-            let brackets = "()"
-            let stack = []
-        
-            for(let bracket of input) {
-            let bracketsIndex = brackets.indexOf(bracket)
-        
-            if (bracketsIndex === -1){
-                continue
-            }
-        
-            if(bracketsIndex % 2 === 0) {
-                stack.push(bracketsIndex + 1)
-            } else {
-                if(stack.pop() !== bracketsIndex) {
-                return false;
-                }
-            }
-            }
-            return stack.length === 0
-        }
 
         // only evaluate if input ends in a number
         this.input = this.input.toString();
@@ -115,15 +95,18 @@ class Calculator {
             let calc = this.input.split('').map((e) => {
                 if (e == '÷') { return '\/' }
                 if (e == '×') { return '\*' }
+
+                // todo: fix parentheses with no operator
+
                 return e;
             }).join('');
 
-            while (!isBalanced(calc)) {
+            while (!this.isBalanced(calc)) {
                 calc = calc + ')';
             }
 
             if (calc || calc == 0) {
-                this.preview = eval(calc);
+                this.preview =  Evaluate.exec(calc);
                 this.fixColors();
             } else {
                 this.preview = '';
@@ -143,6 +126,10 @@ class Calculator {
         this.inputTextElement.innerText = this.input;
         this.calculatePreview();
         this.previewTextElement.innerText = this.preview;
+        if (this.inputTextElement.innerText.length > 9) {
+            this.inputTextElement.style.fontSize = '25px';
+            this.inputTextElement.style.lineHeight = '50px';
+        }
         this.fixColors();
     }
 
@@ -164,6 +151,8 @@ class Calculator {
         }).join('');
     }
 }
+
+let Evaluate = new BigEval();
 
 const numberButtons = document.querySelectorAll('[data-number]');
 const operationButtons = document.querySelectorAll('[data-operation]');

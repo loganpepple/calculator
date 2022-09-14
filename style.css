@@ -73,6 +73,7 @@ img {
     height: 100px;
     line-height: 100px;
     font-size: 50px;
+    word-wrap:break-word;
 }
 
 #preview {
