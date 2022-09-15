@@ -1,6 +1,6 @@
 *, *::before, *::after {
     box-sizing: border-box;
-    font-family: Rubik, sans-serif;
+    font-family: "Space Mono", sans-serif;
     font-weight: 200;
     font-size: 30px;
     color: #65adff;
@@ -59,6 +59,7 @@ img {
 }
 
 #display {
+    display: block;
     grid-column: 1/-1;
     font-family: Rubik, sans-serif;
     height: 100%;
@@ -71,9 +72,33 @@ img {
 
 #input {
     height: 100px;
+    word-wrap: break-word;
+}
+
+.one-line {
     line-height: 100px;
     font-size: 50px;
-    word-wrap:break-word;
+}
+
+.two-lines {
+    padding-top: 8px;
+    line-height: 46px;
+    font-size: 35px;
+}
+
+.three-lines {
+    padding-top: 10px;
+    line-height: 30px;
+    font-size: 25px;
+}
+
+.more-lines {
+    margin-top: 16px;
+    height: 84px !important;
+    line-height: 28px;
+    font-size: 25px;
+    overflow: scroll;
+    scrollbar-width: thin;
 }
 
 #preview {

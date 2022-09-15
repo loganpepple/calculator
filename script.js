@@ -74,14 +74,16 @@ class Calculator {
 
 
     appendParentheses() {
-        // if ending with a number and unbalanced then close
-        // if balanced or ends with operator then open
-        
+        // remove hanging decimal points
         if (this.input.slice(-1) == '.') { this.input = this.input.slice(0, -1) }
 
+        // if ending with a number and unbalanced then close
+        // if balanced or ends with operator then open
         if (/[0-9.]/.test(this.input.slice(-1)) && !this.isBalanced(this.input)) {
             this.append(')');
         } else if (this.isBalanced(this.input) || !(/[0-9.]/.test(this.input.slice(-1)))) {
+            //  insert multiplication if no operator is present
+            if (/[0-9.]/.test(this.input.slice(-1))) { this.append("×") }
             this.append('(');
         }
     }
@@ -95,9 +97,6 @@ class Calculator {
             let calc = this.input.split('').map((e) => {
                 if (e == '÷') { return '\/' }
                 if (e == '×') { return '\*' }
-
-                // todo: fix parentheses with no operator
-
                 return e;
             }).join('');
 
@@ -126,11 +125,33 @@ class Calculator {
         this.inputTextElement.innerText = this.input;
         this.calculatePreview();
         this.previewTextElement.innerText = this.preview;
-        if (this.inputTextElement.innerText.length > 9) {
-            this.inputTextElement.style.fontSize = '25px';
-            this.inputTextElement.style.lineHeight = '50px';
-        }
+        this.resizeText();
         this.fixColors();
+    }
+
+    resizeText() {
+        let characters = (this.input.length);
+        if (characters <= 11) {
+            this.inputTextElement.classList.add("one-line");
+            this.inputTextElement.classList.remove("two-lines");
+            this.inputTextElement.classList.remove("three-lines");
+            this.inputTextElement.classList.remove("more-lines");
+        } else if (characters <= 30) {
+            this.inputTextElement.classList.add("two-lines");
+            this.inputTextElement.classList.remove("one-line");
+            this.inputTextElement.classList.remove("three-lines");
+            this.inputTextElement.classList.remove("more-lines");
+        } else if (characters <= 66) {
+            this.inputTextElement.classList.add("three-lines");
+            this.inputTextElement.classList.remove("one-line");
+            this.inputTextElement.classList.remove("two-lines");
+            this.inputTextElement.classList.remove("more-lines");
+        } else {
+            this.inputTextElement.classList.add("more-lines");
+            this.inputTextElement.classList.remove("one-line");
+            this.inputTextElement.classList.remove("two-lines");
+            this.inputTextElement.classList.remove("three-lines");
+        }
     }
 
     fixColors() {
@@ -152,7 +173,7 @@ class Calculator {
     }
 }
 
-let Evaluate = new BigEval();
+const Evaluate = new BigEval();
 
 const numberButtons = document.querySelectorAll('[data-number]');
 const operationButtons = document.querySelectorAll('[data-operation]');
