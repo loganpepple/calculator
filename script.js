@@ -132,30 +132,22 @@ class Calculator {
     }
 
     resizeText() {
-        // todo: create helper function to manage classList
-
         let characters = (this.input.length);
         if (characters <= 11) {
-            this.inputTextElement.classList.add("one-line");
-            this.inputTextElement.classList.remove("two-lines");
-            this.inputTextElement.classList.remove("three-lines");
-            this.inputTextElement.classList.remove("more-lines");
+            this.changeInputClass('one-line');
         } else if (characters <= 30) {
-            this.inputTextElement.classList.add("two-lines");
-            this.inputTextElement.classList.remove("one-line");
-            this.inputTextElement.classList.remove("three-lines");
-            this.inputTextElement.classList.remove("more-lines");
+            this.changeInputClass('two-lines');
         } else if (characters <= 66) {
-            this.inputTextElement.classList.add("three-lines");
-            this.inputTextElement.classList.remove("one-line");
-            this.inputTextElement.classList.remove("two-lines");
-            this.inputTextElement.classList.remove("more-lines");
+            this.changeInputClass('three-lines');
         } else {
-            this.inputTextElement.classList.add("more-lines");
-            this.inputTextElement.classList.remove("one-line");
-            this.inputTextElement.classList.remove("two-lines");
-            this.inputTextElement.classList.remove("three-lines");
+            this.changeInputClass('more-lines');
         }
+    }
+
+    changeInputClass(className) {
+        const classList = ['one-line', 'two-lines', 'three-lines', 'more-lines'];
+        classList.forEach(a => this.inputTextElement.classList.remove(a));
+        this.inputTextElement.classList.add(className);
     }
 
     fixColors() {
