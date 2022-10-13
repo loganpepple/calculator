@@ -89,10 +89,12 @@ class Calculator {
     }
 
     calculatePreview() {
-
         // only evaluate if input ends in a number
         this.input = this.input.toString();
-        if (/[0-9.\)]/.test(this.input.slice(-1)) && this.input.length > 0) {
+
+        if (this.input == '') {
+            this.preview = ''
+        } else if (/[0-9.\)]/.test(this.input.slice(-1)) && this.input.length > 0) {
             // sanitize: replace unicode symbols with compatible operators, close parentheses, then eval() input
             let calc = this.input.split('').map((e) => {
                 if (e == '÷') { return '\/' }
@@ -130,6 +132,8 @@ class Calculator {
     }
 
     resizeText() {
+        // todo: create helper function to manage classList
+
         let characters = (this.input.length);
         if (characters <= 11) {
             this.inputTextElement.classList.add("one-line");
